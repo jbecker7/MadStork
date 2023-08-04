@@ -7,6 +7,8 @@ from pathlib import Path
 import glob
 
 def main(input_prompt):
+    if len(input_prompt) > 256:
+        input_prompt = input_prompt[:256]
     DATA_DIR = Path.cwd() / "responses"
     DATA_DIR.mkdir(exist_ok=True)
     openai.api_key = os.getenv("OPENAI_API_KEY")
@@ -46,3 +48,4 @@ def main(input_prompt):
         image_file = IMAGE_DIR / f"{JSON_FILE.stem}-{index}.png"
         with open(image_file, mode="wb") as png:
             png.write(image_data)
+            print(f"Saved {image_file}.")
