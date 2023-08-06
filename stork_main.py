@@ -2,6 +2,7 @@ import stork_image
 import stork_wikipedia
 import stork_words
 import stork_script
+import stork_db
 
 
 class Starting():
@@ -49,6 +50,17 @@ class PictureBook():
 
 
 def main():
+    # print("Would you like to read a story or write one? Enter 'read' if you would like to read one. and hit enter otherwise.")
+    # choice = input()
+    # if choice == "read":
+    #     print("Please enter your username.")
+    #     username = input()
+    #     try:
+    #         stork_db.get_stories_by_username(username)
+    #     except:
+    #         pass
+    # else:
+    #     stork_db.main() 
     Starting.word_list()
     PictureBook.make_book(Starting.file_reader())
 
