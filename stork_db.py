@@ -1,13 +1,10 @@
 import psycopg2
 import uuid
 
+
 def main():
     conn = psycopg2.connect(
-        database="jcb",
-        host="localhost",
-        user="jcb",
-        password="",
-        port="5432"
+        database="jcb", host="localhost", user="jcb", password="", port="5432"
     )
     cursor = conn.cursor()
 
@@ -23,7 +20,7 @@ def main():
 
     else:
         print("Adding username to database...")
-        insert_user(username)
+        user_id = insert_user(username)
         print("Username added!")
         return user_id
 
@@ -33,61 +30,55 @@ def main():
 
 def insert_user(username):
     conn = psycopg2.connect(
-        database="jcb",
-        host="localhost",
-        user="jcb",
-        password="",
-        port="5432"
+        database="jcb", host="localhost", user="jcb", password="", port="5432"
     )
     cursor = conn.cursor()
-    
+
     user_id = str(uuid.uuid4())
-    
-    cursor.execute("""
+
+    cursor.execute(
+        """
     INSERT INTO users (user_id, username)
     VALUES (%s, %s);
-    """, (user_id, username))
+    """,
+        (user_id, username),
+    )
 
     conn.commit()
 
     cursor.close()
     conn.close()
-                   
+
+    return user_id
 
 
-def insert_story(username, story_text):
+def insert_story(user_id, story_text):
     conn = psycopg2.connect(
-    database="jcb",
-    host="localhost",
-    user="jcb",
-    password="",
-    port="5432"
-)
+        database="jcb", host="localhost", user="jcb", password="", port="5432"
+    )
+
     cursor = conn.cursor()
-    cursor.execute("""
-    INSERT INTO stories (user_id, story_text)
-    VALUES (
-        (SELECT user_id FROM users WHERE username = %s),
-        %s
-    );
-    """, (username, story_text))
+
+    cursor.execute(
+        """
+        INSERT INTO stories (user_id, story_text)
+        VALUES (%s, %s);
+    """,
+        (user_id, story_text),
+    )
 
     conn.commit()
-
     cursor.close()
     conn.close()
 
 
 def get_stories_by_username(username):
     conn = psycopg2.connect(
-    database="jcb",
-    host="localhost",
-    user="jcb",
-    password="",
-    port="5432"
-)
+        database="jcb", host="localhost", user="jcb", password="", port="5432"
+    )
     cursor = conn.cursor()
-    cursor.execute("""
+    cursor.execute(
+        """
     SELECT 
         u.username,
         s.story_text
@@ -97,7 +88,9 @@ def get_stories_by_username(username):
         stories s ON u.user_id = s.user_id
     WHERE 
         u.username = %s;
-    """, (username,))
+    """,
+        (username,),
+    )
 
     # Fetch all the stories for the given username
     stories = cursor.fetchall()
@@ -110,4 +103,3 @@ def get_stories_by_username(username):
         print(f"Username: {story[0]}, Story: {story[1]}")
 
     return stories
-
