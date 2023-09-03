@@ -49,3 +49,4 @@ def main(input_prompt):
         with open(image_file, mode="wb") as png:
             png.write(image_data)
             print(f"Saved {image_file}.")
+            return "image.jpg"

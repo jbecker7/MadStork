@@ -3,6 +3,8 @@ import stork_wikipedia
 import stork_words
 import stork_script
 import stork_db
+import stork_pdf
+import stork_gutenberg
 
 
 class Starting:
@@ -23,7 +25,7 @@ class Starting:
     @staticmethod
     def file_reader(user_id):
         print(
-            "Please enter your madlib path. If you don't have one, press enter and we will grab one from Wikipedia."
+            "Please enter your madlib path. If you don't have one, press enter and we can get one."
         )
         path = input()
         try:
@@ -32,11 +34,18 @@ class Starting:
                 current = stork_script.Script(imported_ml, collection)
 
         except:
-            print("We will grab one from Wikipedia.")
-            with open("example.txt", "r") as file:
-                imported_ml = stork_wikipedia.main()
-                imported_ml = imported_ml.split()
-                current = stork_script.Script(imported_ml, collection)
+            print("We couldn't find that file.")
+            print("Do you want Wikipedia or Project Gutenberg?")
+            choice = input()
+            if choice == "wikipedia":    
+                print("We will grab one from Wikipedia.")
+                with open("example.txt", "r") as file:
+                    imported_ml = stork_wikipedia.main()
+                    imported_ml = imported_ml.split()
+                    current = stork_script.Script(imported_ml, collection)
+            else:
+                print("We will grab one from Project Gutenberg.")
+                current = stork_script.Script(stork_gutenberg.main(), collection)
 
         stringy = ""
         for word in current.script:
@@ -67,7 +76,10 @@ def main():
     else:
         user_id = stork_db.main()
     Starting.word_list()
-    PictureBook.make_book(Starting.file_reader(user_id))
+    story = Starting.file_reader(user_id)
+    # picture = PictureBook.make_book(story)
+    picture = "image.jpg"
+    # stork_pdf.create_pdf_with_image(story, picture)
 
 
 main()

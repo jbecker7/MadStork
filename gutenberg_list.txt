@@ -1,0 +1,7 @@
+./Gutenberg/Anna-Karenina
+./Gutenberg/Dorian-Gray
+./Gutenberg/Dracula
+./Gutenberg/Frankenstein
+./Gutenberg/Little-Women
+./Gutenberg/Moby-Dick
+./Gutenberg/Romeo-And-Juliet
